@@ -1,13 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Github, Linkedin, Twitter, Mail, Code, Paintbrush, Megaphone } from 'lucide-react'
+import { Progress } from "@/components/ui/progress"
+import { Github, Linkedin, Instagram, Mail, Code, Paintbrush, Megaphone, Download } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
+
+
 
 const projects = {
   developer: [
@@ -27,8 +30,28 @@ const projects = {
   ],
 }
 
+const languages = [
+  { name: 'Español', level: 100 },
+  { name: 'Inglés', level: 85 },
+  { name: 'Francés', level: 60 },
+  { name: 'Alemán', level: 40 },
+]
+
+const skills = [
+  { name: 'React', logo: '/react-logo.png' },
+  { name: 'Next.js', logo: '/nextjs-logo.png' },
+  { name: 'Node.js', logo: '/nodejs-logo.png' },
+  { name: 'Figma', logo: '/figma-logo.png' },
+  { name: 'Google Analytics', logo: '/google-analytics-logo.png' },
+]
+
 export default function Portfolio() {
   const [activeTab, setActiveTab] = useState('developer')
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    setIsLoaded(true)
+  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800">
@@ -54,7 +77,7 @@ export default function Portfolio() {
               <Linkedin className="w-6 h-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors" />
             </Link>
             <Link href="https://www.instagram.com/ramon_aguileraa/" target="_blank" rel="noopener noreferrer">
-              <Twitter className="w-6 h-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors" />
+              <Instagram className="w-6 h-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors" />
             </Link>
             <Link href="mailto:ramonaguileradve@gmail.com">
               <Mail className="w-6 h-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors" />
@@ -70,18 +93,60 @@ export default function Portfolio() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Avatar className="w-32 h-32 mx-auto mb-4">
-              <AvatarImage src="/yo.jpg" alt="Ramon Aguilera" />
-              <AvatarFallback>RA</AvatarFallback>
-            </Avatar>
+            <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden">
+              <img src="/yo.jpg" alt="Ramon Aguilera" className="w-full h-full object-cover" />
+            </div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Hi, I'm Ramon Aguilera</h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-4">Developer | Marketer | Designer</p>
             <p className="max-w-2xl mx-auto text-gray-600 dark:text-gray-300">
-            Soy un estudiante de ingenieria en Tic´s Entornos vitruales y negocios digitales apacionado, versátil y con experiencia en desarrollo, marketing y diseño.
-            Me encanta crear soluciones innovadoras, aprender y dar vida a las ideas a través del código y la creatividad
+              Soy un estudiante de ingeniería en TIC's Entornos virtuales y negocios digitales apasionado, versátil y con experiencia en desarrollo, marketing y diseño.
+              Me encanta crear soluciones innovadoras, aprender y dar vida a las ideas a través del código y la creatividad.
             </p>
           </motion.div>
         </section>
+
+        <section className="mb-12">
+          <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">Mis idiomas</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {languages.map((language, index) => (
+              <motion.div
+                key={language.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <p className="text-gray-700 dark:text-gray-300 mb-2">{language.name}</p>
+                <Progress value={language.level} className="w-full" />
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-12">
+  <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">Mis habilidades</h2>
+  <div className="relative overflow-hidden">
+    <motion.div
+      className="flex space-x-10 animate-scroll"
+      initial={{ x: 0 }}
+      animate={{ x: '-100%' }}
+      transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+    >
+      {skills.concat(skills).map((skill, index) => (
+        <div key={index} className="flex flex-col items-center">
+          <div className="w-16 h-16 mb-2 relative">
+            <Image
+              src={skill.logo}
+              alt={`${skill.name} logo`}
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
+          <p className="text-gray-700 dark:text-gray-300 text-center">{skill.name}</p>
+        </div>
+      ))}
+    </motion.div>
+  </div>
+</section>
 
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">Mis proyectos</h2>
@@ -110,19 +175,26 @@ export default function Portfolio() {
               >
                 <TabsContent value={activeTab} className="mt-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {projects[activeTab].map((project) => (
-                      <Card key={project.id} className="overflow-hidden">
-                        <CardHeader className="p-0">
-                          <img src={project.image} alt={project.title} className="w-full h-48 object-cover" />
-                        </CardHeader>
-                        <CardContent className="p-4">
-                          <CardTitle>{project.title}</CardTitle>
-                          <CardDescription>{project.description}</CardDescription>
-                        </CardContent>
-                        <CardFooter>
-                          <Button variant="outline" className="w-full">Learn More</Button>
-                        </CardFooter>
-                      </Card>
+                    {projects[activeTab].map((project, index) => (
+                      <motion.div
+                        key={project.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                      >
+                        <Card className="overflow-hidden h-full flex flex-col">
+                          <CardHeader className="p-0">
+                            <Image src={project.image} alt={project.title} width={500} height={200} className="w-full h-48 object-cover" />
+                          </CardHeader>
+                          <CardContent className="p-4 flex-grow">
+                            <CardTitle>{project.title}</CardTitle>
+                            <CardDescription>{project.description}</CardDescription>
+                          </CardContent>
+                          <CardFooter>
+                            <Button variant="outline" className="w-full">Learn More</Button>
+                          </CardFooter>
+                        </Card>
+                      </motion.div>
                     ))}
                   </div>
                 </TabsContent>
@@ -136,17 +208,25 @@ export default function Portfolio() {
           <p className="text-gray-600 dark:text-gray-300 mb-6">
             Interested in working together or have a question? Feel free to reach out!
           </p>
-          <Button asChild>
-            <Link href="mailto:ramon@example.com">
-              Get in Touch
-            </Link>
-          </Button>
+          <div className="flex justify-center space-x-4">
+            <Button asChild>
+              <Link href="mailto:ramon@example.com">
+                Get in Touch
+              </Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/cv.pdf" download>
+                <Download className="w-4 h-4 mr-2" />
+                Download CV
+              </Link>
+            </Button>
+          </div>
         </section>
       </main>
 
       <footer className="bg-gray-100 dark:bg-gray-900 py-6 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <p className="text-gray-600 dark:text-gray-300">© 2024 Ramon Aguilera. All rights reserved.</p>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+          <p className="text-gray-600 dark:text-gray-300 mb-4 md:mb-0">© 2024 Ramon Aguilera. All rights reserved.</p>
           <div className="flex space-x-4">
             <Link href="/privacy" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
               Privacy Policy
