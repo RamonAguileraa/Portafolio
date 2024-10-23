@@ -11,8 +11,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { BackgroundBeams } from '@/components/ui/background-beams'
 
-// Removed duplicate Portfolio function definition
-
 const projects = {
   developer: [
     { id: 1, title: 'Ibenteu', description: 'Plataforma web desarrollada usando lenguaje vanilla y php para buscar, gestionar y reservar salones de eventos, con pagos en línea y recomendaciones personalizadas.', image: '/IBENTEU.PNG', moreInfo: 'Detalles adicionales sobre el proyecto Ibenteu.' },
